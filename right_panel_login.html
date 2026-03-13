@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="right_panel_login.css">
+</head>
+<body>
+    <div class="form-panel">
+
+        <!-- Tab switcher -->
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="loginTab" onclick="switchTab('login')">Sign In</div>
+          <div class="auth-tab" id="registerTab" onclick="switchTab('register')">Create Account</div>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div class="form-view active" id="loginView">
+          <div class="form-heading">
+            <h2>Welcome back 👋</h2>
+            <p>Sign in to your PostOBT account</p>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Username or Email</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" id="login-username" placeholder="jay@example.com" autocomplete="username"/>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+              <button class="eye-btn" onclick="togglePassword('login-password', this)" tabindex="-1">
+              </button>
+            </div>
+          </div>
+
+          <div class="forgot-row">
+            <a class="forgot-link" onclick="showToast('Password reset link sent! 📧')">Forgot password?</a>
+          </div>
+
+          <button class="submit-btn" onclick="handleLogin()">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+          </button>
+
+          <div class="or-divider">or continue with</div>
+          <div class="social-row">
+            <button class="social-btn" onclick="showToast('Google login coming soon!')">
+              <i class="fa-brands fa-google"></i> Google
+            </button>
+          </div>
+
+          <div class="switch-text">
+            Don't have an account? <a onclick="switchTab('register')">Sign up</a>
+          </div>
+        </div>
+
+        <!-- REGISTER FORM — single page, inline OTP -->
+        <div class="form-view" id="registerView">
+          <div class="form-heading">
+            <h2>Create account 🚀</h2>
+            <p>Fill details and verify OTP to continue</p>
+          </div>
+
+          <!-- USERNAME -->
+          <div class="input-group">
+            <label class="input-label">Username</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" id="reg-username" placeholder="jaysharma" autocomplete="username"/>
+            </div>
+          </div>
+
+          <!-- EMAIL + SEND OTP + INLINE VERIFY -->
+          <div class="input-group">
+            <label class="input-label">Email Address <span style="color:#ef4444;">*</span></label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" id="reg-email" placeholder="jay@example.com" autocomplete="email" class="has-btn"/>
+              <button class="send-otp-btn" id="sendEmailOtpBtn" onclick="sendOTP('email')">
+                <i class="fa-solid fa-paper-plane"></i> Send OTP
+              </button>
+            </div>
+            <!-- Email OTP inline verify -->
+            <div class="otp-inline" id="emailOtpInline">
+              <div class="otp-inline-label">
+                <span>Enter 6-digit OTP sent to your email</span>
+                <div class="otp-timer-small">⏱ <span id="emailTimer">02:00</span></div>
+              </div>
+              <div class="otp-boxes">
+                <input class="otp-box" id="eotp0" maxlength="1" inputmode="numeric" oninput="otpInput(this,'eotp',0)" onkeydown="otpKeydown(event,this,'eotp',0)"/>
+                <input class="otp-box" id="eotp1" maxlength="1" inputmode="numeric" oninput="otpInput(this,'eotp',1)" onkeydown="otpKeydown(event,this,'eotp',1)"/>
+                <input class="otp-box" id="eotp2" maxlength="1" inputmode="numeric" oninput="otpInput(this,'eotp',2)" onkeydown="otpKeydown(event,this,'eotp',2)"/>
+                <input class="otp-box" id="eotp3" maxlength="1" inputmode="numeric" oninput="otpInput(this,'eotp',3)" onkeydown="otpKeydown(event,this,'eotp',3)"/>
+                <input class="otp-box" id="eotp4" maxlength="1" inputmode="numeric" oninput="otpInput(this,'eotp',4)" onkeydown="otpKeydown(event,this,'eotp',4)"/>
+                <input class="otp-box" id="eotp5" maxlength="1" inputmode="numeric" oninput="otpInput(this,'eotp',5)" onkeydown="otpKeydown(event,this,'eotp',5)"/>
+              </div>
+              <div class="otp-inline-footer">
+                <button class="resend-btn" id="resendEmailBtn" disabled onclick="resendOTP('email')">Resend OTP</button>
+              </div>
+            </div>
+            <div class="verified-badge" id="emailVerified">
+              <i class="fa-solid fa-circle-check"></i> Email verified ✓
+            </div>
+          </div>
+
+          <!-- MOBILE + SEND OTP + INLINE VERIFY -->
+          <div class="input-group">
+            <label class="input-label">Mobile Number <span style="color:#ef4444;">*</span></label>
+            <div class="phone-row">
+              <select class="country-code" id="countryCode">
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+81">🇯🇵 +81</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+33">🇫🇷 +33</option>
+              </select>
+              <div class="input-wrap">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <input type="tel" id="reg-mobile" placeholder="9876543210" class="has-btn" maxlength="10"/>
+                <button class="send-otp-btn" id="sendMobileOtpBtn" onclick="sendOTP('mobile')">
+                  <i class="fa-solid fa-paper-plane"></i> Send OTP
+                </button>
+              </div>
+            </div>
+            <!-- Mobile OTP inline verify -->
+            <div class="otp-inline" id="mobileOtpInline">
+              <div class="otp-inline-label">
+                <span>Enter 6-digit OTP sent to your mobile</span>
+                <div class="otp-timer-small">⏱ <span id="mobileTimer">02:00</span></div>
+              </div>
+              <div class="otp-boxes">
+                <input class="otp-box" id="motp0" maxlength="1" inputmode="numeric" oninput="otpInput(this,'motp',0)" onkeydown="otpKeydown(event,this,'motp',0)"/>
+                <input class="otp-box" id="motp1" maxlength="1" inputmode="numeric" oninput="otpInput(this,'motp',1)" onkeydown="otpKeydown(event,this,'motp',1)"/>
+                <input class="otp-box" id="motp2" maxlength="1" inputmode="numeric" oninput="otpInput(this,'motp',2)" onkeydown="otpKeydown(event,this,'motp',2)"/>
+                <input class="otp-box" id="motp3" maxlength="1" inputmode="numeric" oninput="otpInput(this,'motp',3)" onkeydown="otpKeydown(event,this,'motp',3)"/>
+                <input class="otp-box" id="motp4" maxlength="1" inputmode="numeric" oninput="otpInput(this,'motp',4)" onkeydown="otpKeydown(event,this,'motp',4)"/>
+                <input class="otp-box" id="motp5" maxlength="1" inputmode="numeric" oninput="otpInput(this,'motp',5)" onkeydown="otpKeydown(event,this,'motp',5)"/>
+              </div>
+              <div class="otp-inline-footer">
+                <button class="resend-btn" id="resendMobileBtn" disabled onclick="resendOTP('mobile')">Resend OTP</button>
+              </div>
+            </div>
+            <div class="verified-badge" id="mobileVerified">
+              <i class="fa-solid fa-circle-check"></i> Mobile verified ✓
+            </div>
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="reg-password" placeholder="Min. 8 characters" autocomplete="new-password"/>
+              <button class="eye-btn" onclick="togglePassword('reg-password', this)" tabindex="-1">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- SUBMIT -->
+          <button class="submit-btn" id="finalRegBtn" onclick="finalizeRegister()">
+            <i class="fa-solid fa-user-plus"></i> Create Account
+          </button>
+
+          <div class="terms-text" style="margin-top:12px;">
+            By signing up, you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a>.
+          </div>
+          <div class="switch-text">
+            Already have an account? <a onclick="switchTab('login')">Sign in</a>
+          </div>
+        </div>
+
+      </div>
+    <script src="right_panel_login.js"></script>
+</body>
+</html>
